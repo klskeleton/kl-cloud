@@ -22,8 +22,8 @@ const cdn = {
 		'element-ui': 'ELEMENT'
 	},
 	js: [
-		'https://cdn.jsdelivr.net/npm/vue',
-		'https://unpkg.com/vue-router/dist/vue-router.js',
+		'https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js',
+		'https://cdn.bootcdn.net/ajax/libs/vue-router/3.4.8/vue-router.min.js',
 		'https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js',
 		'https://unpkg.com/element-ui/lib/index.js'
 	],

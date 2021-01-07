@@ -7,6 +7,10 @@
 		<link rel="icon" href="favicon.ico">
 		<title>klcloud</title>
 		
+		<% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+		  <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>" ></script>
+		<% } %>
+		
 		<!-- <script src="klcloud.config.js" type="text/javascript"></script> -->
 
 		<!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js" integrity="sha512-GoORoNnxst42zE3rYPj4bNBm0Q6ZRXKNH2D9nEmNvVF/z24ywVnijAWVi/09iBiVDQVf3UlZHpzhAJIdd9BXqw==" crossorigin="anonymous"></script> -->
@@ -14,6 +18,7 @@
 		      <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style">
 		      <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet">
 		    <% } %>
+			
 
 	</head>
 	<body>
@@ -21,9 +26,7 @@
 		<div id="app"></div>
 		<!-- built files will be auto injected -->
 		
-		    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
-		      <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
-		    <% } %>
+
 
 	</body>
 </html>

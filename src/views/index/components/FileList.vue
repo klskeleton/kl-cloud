@@ -77,7 +77,7 @@
 						<div v-if="content.startsWith('data:image')">
 								
 							<el-card>
-								<img :src="content" />
+								<img style="min-width: 100%;" :src="content" />
 							</el-card>
 							<el-input style="margin-top: 20px;" type="textarea" :rows="3"  disabled  v-model="content"> 	</el-input>
 						</div>
@@ -240,7 +240,7 @@
 		}
 	}
 	
-	@media screen  and (min-width:1200px)  {
+	@media screen  and (min-width:600px)  {
 		.adapta-item.big{
 			display: display;
 		}

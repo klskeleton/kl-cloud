@@ -3,8 +3,10 @@ var fs = require('fs');
 var path = require('path');
 var bodyParser = require('body-parser');
 var app = express();
-var config = require('dist/klcloud.config.js')
 var multiparty = require("multiparty")
+
+//使用我自己的一些配置，主要就是配置端口，还有公开文件的路径
+var config = require('./dist/klcloud.config.js')
 
 
 app.use(bodyParser.json())
@@ -12,6 +14,8 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }))
 
+
+//添加请求头
 app.all('*', function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "content-type");
@@ -22,7 +26,7 @@ app.all('*', function(req, res, next) {
 
  
 
-// async version with basic error handling
+// 读取当前文件夹下的所有文件
 function walk(currentDirPath, callback) {
 	var list = []
 	var fs = require('fs'),
@@ -35,13 +39,14 @@ function walk(currentDirPath, callback) {
 				var filePath = path.join(currentDirPath, files[i]);
 				var stat = fs.statSync(filePath);
 				if (stat.isFile()) {
+					//添加文件信息
 					list.push({
 						file_name: files[i],
 						file_stat: stat,
 						file_path: filePath.replace(/\\/g, "/"),
-						is_file: true
+						is_file: true	//是否为文件
 					});
-					//callback(文件路径，是否为文件，或者是文件夹)
+ 
 				} else if (stat.isDirectory()) {
 					list.push({
 						file_name: files[i],
@@ -56,7 +61,7 @@ function walk(currentDirPath, callback) {
 	});
 }
 
-
+//统一格式化返回值
 function formatReq(code, msg, data) {
 	return {
 		code: code,
@@ -65,15 +70,12 @@ function formatReq(code, msg, data) {
 	}
 }
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-	extended: false
-}));
+ 
 // // 访问静态资源
-app.use(express.static(path.resolve(__dirname, 'dist/')));
+app.use(express.static(path.resolve(__dirname, './dist/')));
 // 访问单页
 app.get('/', function(req, res) {
-	var html = fs.readFileSync(path.resolve(__dirname, 'dist/index.html'), 'utf-8');
+	var html = fs.readFileSync(path.resolve(__dirname, './dist/index.html'), 'utf-8');
 	res.writeHead(200, {"Content-Type": "text/html"});
 	
 	res.send(html);
@@ -85,10 +87,10 @@ app.get('/', function(req, res) {
 app.post('/api/file/open', (req, res) => {
 	
 	console.log("获取路径下的文件", req.body);
-	
-	
 	let file_type = req.body.path.substring(req.body.path.lastIndexOf('.') + 1, req.body.path.length)
 	console.log(file_type)
+	
+	//如果是图片
 	if (file_type.match(/(png|jpg|svg|gif|jpeg|ico)/)) {
 		fs.readFile(req.body.path,'binary',function(err,data){
 		    if(err){
@@ -101,21 +103,6 @@ app.post('/api/file/open', (req, res) => {
 				res.send(formatReq(1, "获取成功", src))
 		    }
 		});
-		// res.set('content-type', 'image/png'); //设置返回类型
-		// var stream = fs.createReadStream(req.body.path);
-		// var responseData = []; //存储文件流
-		// if (stream) { //判断状态
-		// 	stream.on('data', function(chunk) {
-		// 		responseData.push(chunk);
-		// 	});
-		// 	stream.on('end', function() {
-		// 		var finalData = Buffer.concat(responseData);
-		// 		res.write(finalData,'binary');
-		// 		res.end();
-		// 	});
-		// }
-		// console.log("获取图片", __dirname + "\\" + req.body.path.replace(/\//g, '\\'))
-		// res.sendFile(__dirname + "\\" + req.body.path.replace(/\//g, '\\'));
 	} else {
 		var content = fs.readFileSync(req.body.path, 'utf-8');
 		res.send(formatReq(1, "获取成功", content))
@@ -125,7 +112,7 @@ app.post('/api/file/open', (req, res) => {
 
 })
 
-//获取路径下的文件夹
+//获取路径下的所有文件
 app.post('/api/file/list', (req, res) => {
 	console.log("获取路径下的文件夹", req.body);
 	walk(req.body.path, file_list => {
@@ -183,14 +170,7 @@ app.post('/api/file/upload', (req, res) => {
 
 		}
 	})
-	// fs.writeFile(req.fields.path, req.files,{encoding: 'utf8'} ,(err) => {
-	// 	if (err) {
-	// 	  res.send(formatReq(0,"上传文件失败"))
-	// 	} else {
-	// 	  res.send(formatReq(1,"上传文件成功"))
-	// 	}
-	//   res.end()
-	// });
+ 
 })
 
 //创建文件夹
