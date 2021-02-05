@@ -1,24 +1,13 @@
 # klcloud
 
-## Project setup
-```
+## start
+```shell
+//安装依赖
 npm install
+//开启服务器
+node app.js
+//开启项目
+npm run server
+//打包
+npm build
 ```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
